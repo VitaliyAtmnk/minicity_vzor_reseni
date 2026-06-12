@@ -1,1 +1,15 @@
 MINICITY REPORT
+
+Map size: 5
+Budget: 1322
+Total score: 800
+Tiles by type: 
+RoadTiles: 2
+ ParkTiles: 1
+ HouseTiles: 1
+ FactoryTiles: 0
+Special tiles:
+Upgradable tiles: 4
+Producing tiles: 0
+Total house population: 3
+Top 3 tiles by score:

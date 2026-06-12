@@ -70,6 +70,11 @@ public final class CityManagerSmokeTest {
         require(cityManager.getBudget() == budgetBeforeOverwrite - RoadTile.PRICE,
                 "Overwriting a tile must still cost its purchase price.");
 
+        cityManager.nextTurn();
+        // test export
+        cityManager.exportTiles();
+        cityManager.exportReport();
+
         require(cityManager.getTotalScore() > 0, "Total score must be calculated.");
         System.out.println("Smoke test passed.");
     }

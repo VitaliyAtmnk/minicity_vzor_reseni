@@ -234,4 +234,24 @@ public class CityManager {
             throw new RuntimeException(e);
         }
     }
+
+    public void exportTiles() {
+        try {
+            FileWriter exportTiles = new FileWriter("tiles.csv");
+            exportTiles.write("x;y;symbol;score;distanceFromCenter;price");
+            exportTiles.write("\n");
+            for (Tile tile : cityMap.getTiles()) {
+                exportTiles.write(tile.getCoordinate().getX() + ";");
+                exportTiles.write(tile.getCoordinate().getY() + ";");
+                exportTiles.write(tile.getSymbol() + ";");
+                exportTiles.write(tile.getScore() + ";");
+                exportTiles.write(tile.getCoordinate().distanceTo(cityMap.getCenter()) + ";");
+                exportTiles.write(tile.getPrice() + ";");
+                exportTiles.write("\n");
+            }
+            exportTiles.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
