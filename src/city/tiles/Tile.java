@@ -55,4 +55,14 @@ public abstract class Tile {
      * @return aktuální skóre políčka
      */
     public abstract int getScore();
+
+    @Override
+    public String toString() {
+        return "Tile{" +
+            "coordinate=" + coordinate +
+            ", createdAt=" + createdAt + " "+
+            getScore() +" "+
+            getSymbol() +" "+
+            '}';
+    }
 }
