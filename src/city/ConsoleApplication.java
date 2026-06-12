@@ -4,6 +4,7 @@ import city.logic.CityManager;
 import city.logic.CityMap;
 import city.tiles.Tile;
 
+import java.nio.file.Files;
 import java.util.Scanner;
 
 /**
@@ -60,6 +61,8 @@ public class ConsoleApplication {
      *
      * @param command text příkazu
      */
+
+
     public void processCommand(String command) {
         String trimmedCommand = command.trim();
         if (trimmedCommand.isEmpty()) {

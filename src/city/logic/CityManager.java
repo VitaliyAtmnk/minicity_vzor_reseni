@@ -9,9 +9,8 @@ import city.tiles.ParkTile;
 import city.tiles.RoadTile;
 import city.tiles.Tile;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
+import java.io.FileWriter;
+import java.util.*;
 
 /**
  * Koordinuje práci s mapou města, rozpočtem, skóre a průběhem tahů.
@@ -140,5 +139,119 @@ public class CityManager {
             case "factory" -> new FactoryTile(coordinate);
             default -> throw new IllegalArgumentException("Unknown tile type: " + tileType);
         };
+    }
+
+    public void exportReport(){
+        try {
+            FileWriter exportCity = new FileWriter("report.txt");
+            exportCity.write("MINICITY REPORT");
+            exportCity.write("\n");
+            exportCity.write("\n");
+            exportCity.write("Map size: " + cityMap.getSize());
+            exportCity.write("\n");
+            exportCity.write("Budget: " + budget);
+            exportCity.write("\n");
+            exportCity.write("Total score: " + getTotalScore());
+            exportCity.write("\n");
+            exportCity.write("Tiles by type: ");
+            exportCity.write("\n");
+            int roadTilesCount = 0;
+            int parkTilesCount = 0;
+            int houseTilesCount = 0;
+            int factoryTilesCount = 0;
+            for (Tile tile : cityMap.getTiles()) {
+                if (tile.getClass().getSimpleName().equals("RoadTile")) {
+                    roadTilesCount++;
+                }
+                if (tile.getClass().getSimpleName().equals("ParkTile")) {
+                    parkTilesCount++;
+                }
+                if (tile.getClass().getSimpleName().equals("HouseTile")) {
+                    houseTilesCount++;
+                }
+                if (tile.getClass().getSimpleName().equals("FactoryTile")) {
+                    factoryTilesCount++;
+                }
+
+            }
+            exportCity.write("RoadTiles: " + roadTilesCount + "\n ParkTiles: " + parkTilesCount + "\n HouseTiles: " + houseTilesCount + "\n FactoryTiles: " + factoryTilesCount);
+            exportCity.write("\n");
+            exportCity.write("Special tiles:");
+            exportCity.write("\n");
+            int upgradeableTilesCount = 0;
+            int productionTilesCount = 0;
+            for (Tile tile : cityMap.getTiles()) {
+                if (tile instanceof Upgradable) {
+                    upgradeableTilesCount++;
+                }
+                if (tile instanceof Producing) {
+                    productionTilesCount++;
+                }
+            }
+
+            exportCity.write("Upgradable tiles: " + upgradeableTilesCount);
+            exportCity.write("\n");
+            exportCity.write("Producing tiles: " + productionTilesCount);
+            exportCity.write("\n");
+
+            int totalHousePopulation = 0;
+            for (Tile tile : cityMap.getTiles()) {
+                if (tile instanceof HouseTile) {
+                    totalHousePopulation += ((HouseTile) tile).getPopulation();
+                }
+            }
+            exportCity.write("Total house population: " + totalHousePopulation);
+
+            exportCity.write("\n");
+            exportCity.write("Top 3 tiles by score:");
+            exportCity.write("\n");
+            int bestRoadTileScore = 0;
+            int bestParkTileScore = 0;
+            int bestHouseTileScore = 0;
+            int bestFactoryTileScore = 0;
+            for (Tile tile : cityMap.getTiles()) {
+                if (tile instanceof RoadTile && tile.getScore() > bestRoadTileScore) {
+                    bestRoadTileScore = tile.getScore();
+                }
+                if (tile instanceof ParkTile && tile.getScore() > bestParkTileScore) {
+                    bestParkTileScore = tile.getScore();
+                }
+                if (tile instanceof HouseTile && tile.getScore() > bestHouseTileScore) {
+                    bestHouseTileScore = tile.getScore();
+                }
+                if (tile instanceof FactoryTile && tile.getScore() > bestFactoryTileScore) {
+                    bestFactoryTileScore = tile.getScore();
+                }
+            }
+            SortedSet<Integer> bestTiles = new TreeSet<>();
+            bestTiles.add(bestFactoryTileScore);
+            bestTiles.add(bestRoadTileScore);
+            bestTiles.add(bestParkTileScore);
+            bestTiles.add(bestHouseTileScore);
+            //dosly mi znalosti na dokonceni
+            exportCity.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void exportTiles() {
+        try {
+            FileWriter exportTiles = new FileWriter("tiles.csv");
+            exportTiles.write("x;y;symbol;score;distanceFromCenter;price");
+            exportTiles.write("\n");
+            for (Tile tile : cityMap.getTiles()) {
+                exportTiles.write(tile.getCoordinate().getX() + ";");
+                exportTiles.write(tile.getCoordinate().getY() + ";");
+                exportTiles.write(tile.getSymbol() + ";");
+                exportTiles.write(tile.getScore() + ";");
+                exportTiles.write(tile.getCoordinate().distanceTo(cityMap.getCenter()) + ";");
+                exportTiles.write(tile.getPrice() + ";");
+                exportTiles.write("\n");
+            }
+            exportTiles.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
