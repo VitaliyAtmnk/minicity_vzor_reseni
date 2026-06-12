@@ -1,0 +1,41 @@
+MINICITY REPORT
+
+Map size: 5
+Budget: 3648
+Total score: 3775
+Total tiles: 13
+
+Tiles by type:
+FactoryTile: 3
+HouseTile: 4
+ParkTile: 3
+RoadTile: 3
+
+Special tiles:
+Producing tiles: 23.076923076923077%
+Upgradable tiles: 76.92307692307693%
+Population: 23
+
+Filled: 1.9230769230769231
+
+Price per type:
+FactoryTile 900
+HouseTile 800
+ParkTile 450
+RoadTile 300
+
+Avg score per upgradable:
+HouseTile 375.0
+ParkTile 325.0
+RoadTile 133.33333333333334
+
+Able to buy from type:
+FactoryTile 12
+HouseTile 18
+ParkTile 24
+RoadTile 36
+
+Top 3 tiles by score:
+1. House (2, 1) | Population: 7 | Level: 2 | Score: 500
+2. House (2, 2) | Population: 3 | Level: 2 | Score: 500
+3. Park (3, 2) | Level: 2 | Attractiveness bonus: 75 | Score: 475

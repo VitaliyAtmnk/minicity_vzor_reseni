@@ -15,6 +15,7 @@ public class ConsoleApplication {
 
     private final Scanner scanner;
     private final CityManager cityManager;
+    private final CommandProcessor processCommand;
     private boolean running;
 
     /**
@@ -27,6 +28,7 @@ public class ConsoleApplication {
         this.scanner = scanner;
         this.cityManager = cityManager;
         this.running = true;
+        processCommand = new CommandProcessor(cityManager);
     }
 
     /**
@@ -48,59 +50,11 @@ public class ConsoleApplication {
         while (running && scanner.hasNextLine()) {
             String command = scanner.nextLine();
             try {
-                processCommand(command);
+                running = processCommand.processCommand(command);
             } catch (RuntimeException exception) {
                 System.out.println("Error: " + exception.getMessage());
             }
         }
     }
 
-    /**
-     * Zpracuje jeden příkaz uživatele. Očekává správný počet a typ argumentů za platným příkazem.
-     *
-     * @param command text příkazu
-     */
-    public void processCommand(String command) {
-        String trimmedCommand = command.trim();
-        if (trimmedCommand.isEmpty()) {
-            return;
-        }
-
-        String[] parts = trimmedCommand.split(" ");
-        switch (parts[0].toLowerCase()) {
-            case "add" ->       addTile(parts);
-            case "remove" ->    removeTile(parts);
-            case "info" ->      printInfo(parts);
-            case "upgrade" ->   upgradeTile(parts);
-            case "next" ->      cityManager.nextTurn();
-            case "show" ->      cityManager.printMap();
-            case "budget" ->    System.out.println(cityManager.getBudget());
-            case "exit" -> {
-                System.out.println("Score: " + cityManager.getTotalScore());
-                running = false;
-            }
-            default -> System.out.println("Unknown command: " + parts[0]);
-        }
-    }
-
-    private void addTile(String[] parts) {
-        cityManager.addTile(parts[1], coordinate(parts[2], parts[3]));
-    }
-
-    private void removeTile(String[] parts) {
-        cityManager.removeTile(coordinate(parts[1], parts[2]));
-    }
-
-    private void printInfo(String[] parts) {
-        Tile tile = cityManager.getCityMap().getTile(coordinate(parts[1], parts[2]));
-        System.out.println(tile == null ? "Empty tile" : tile.getDescription());
-    }
-
-    private void upgradeTile(String[] parts) {
-        cityManager.upgradeTile(coordinate(parts[1], parts[2]));
-    }
-
-    private Coordinate coordinate(String x, String y) {
-        return new Coordinate(Integer.parseInt(x), Integer.parseInt(y));
-    }
 }
