@@ -4,6 +4,10 @@ import city.logic.CityManager;
 import city.logic.CityMap;
 import city.tiles.Tile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -38,6 +42,38 @@ public class ConsoleApplication {
         try (Scanner scanner = new Scanner(System.in)) {
             CityManager cityManager = new CityManager(new CityMap(DEFAULT_MAP_SIZE), DEFAULT_BUDGET);
             new ConsoleApplication(scanner, cityManager).run();
+
+
+            List<String> lines;
+            String[] tokens;
+            File directory = new File("inputs");
+            for (File f : directory.listFiles()) {
+                if (f.getName().endsWith(".txt") && f.getName().startsWith("city_") && f.length() < 1000000) {
+
+                    lines = Files.readAllLines(f.toPath());
+                    for (String line : lines) {
+                        tokens = line.split(" ");
+                        if (tokens[0].equals("Add")) {
+                            cityManager.addTile(tokens[1], new Coordinate(Integer.parseInt(tokens[2]), Integer.parseInt(tokens[3])));
+                        }
+                        if (tokens[0].equals("Next")) {
+                            cityManager.nextTurn();
+                        }
+                        if (tokens[0].equals("Upgrade")) {
+                            cityManager.upgradeTile(new Coordinate(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
+                        }
+                        if (tokens[0].equals("Remove")) {
+                            cityManager.removeTile(new Coordinate(Integer.parseInt(tokens[1]), Integer.parseInt(tokens[2])));
+                        }
+                    }
+
+                }
+            }
+            List<Tile> tiles = cityManager.getTiles();
+            System.out.println(tiles);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
