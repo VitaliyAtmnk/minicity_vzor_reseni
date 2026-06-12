@@ -186,7 +186,7 @@ Soubor bude obsahovat všechny dlaždice ve výsledném městě.
 ### Povinná hlavička
 
 ```text
-x;y;type;symbol;score;distanceFromCenter;createdAt
+x;y;symbol;score;distanceFromCenter;price
 ```
 
 ### Příklad obsahu
