@@ -12,11 +12,10 @@ import java.util.List;
 
 public class Main {
 
-
     public void processFiles(CityManager cityManager, String directoryPath) {
         File folder = new File(directoryPath);
         File[] files = folder.listFiles((dir, name) ->
-            name.startsWith("city_") && name.endsWith(".txt")
+                name.startsWith("city_") && name.endsWith(".txt")
         );
 
         if (files == null) return;
@@ -59,20 +58,22 @@ public class Main {
         }
     }
 
-    public void tileExport(CityManager cityManager, String tilesPath){
+    public void tileExport(CityManager cityManager, String tilesPath) {
         List<Tile> tiles = cityManager.getTiles();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(tilesPath))) {
             writer.write("x;y;type;symbol;score;distanceFromCenter;createdAt");
             writer.newLine();
             for (Tile tile : tiles) {
-                writer.write(tile.getCoordinate().getX() + ";" + tile.getCoordinate().getY() + ";" + tile.getClass() + ";" + tile.getSymbol() + ";" + tile.getScore() + ";" + tile.getCoordinate().distanceTo(cityManager.getCityMap().getCenter())
-            ;}
+                writer.write(tile.getCoordinate().getX() + ";" + tile.getCoordinate().getY() + ";" + tile.getClass() + ";" + tile.getSymbol() + ";" + tile.getScore() + ";" + tile.getCoordinate().distanceTo(cityManager.getCityMap().getCenter()));
+                writer.newLine();
+
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void cityReport(CityManager cityManager, String reportPath){
+    public void cityReport(CityManager cityManager, String reportPath) {
         List<Tile> tiles = cityManager.getTiles();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(reportPath))) {
             writer.write("MINICITY REPORT");
@@ -84,13 +85,9 @@ public class Main {
             writer.write("Total score: " + cityManager.getTotalScore());
             writer.newLine();
             writer.write("Total tiles: " + tiles.size());
-            writer.newLine();
-            writer.write("Tiles by type:" + tiles.getClass());
-            writer.newLine();
-            writer.write("Top 3 tiles by score: " + tiles.getClass());
 
 
-    } catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -98,7 +95,13 @@ public class Main {
     public static void main(String[] args) {
         CityMap cityMap = new CityMap(5);
         CityManager cityManager = new CityManager(cityMap, 5000);
-
+        Main main = new Main();
+        main.processFiles(cityManager, "inputs");
+        File folderMaker = new File("outputs");
+        folderMaker.mkdir();
+        main.tileExport(cityManager, "outputs/tiles.csv");
+        main.cityReport(cityManager, "outputs/report.txt");
     }
+}
 
 
